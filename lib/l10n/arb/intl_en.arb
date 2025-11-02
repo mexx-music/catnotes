@@ -1,0 +1,19 @@
+{
+  "appTitle": "Cat Notes",
+  "notesEmpty": "No notes yet",
+  "createNoteTip": "Create a new note",
+  "editNote": "Edit Note",
+  "save": "Save",
+  "delete": "Delete",
+  "share": "Share",
+  "search": "Search...",
+  "tags": "Tags",
+  "pinned": "Pinned",
+  "reminder": "Reminder",
+  "addImage": "Add Image",
+  "removeImage": "Remove Image",
+  "setReminder": "Set Reminder",
+  "removeReminder": "Remove Reminder",
+  "settings": "Settings"
+}
+

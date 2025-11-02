@@ -1,3 +1,4 @@
+/// language: dart
 import 'dart:developer' as dev;
 
 enum LogLevel { d, i, w, e }

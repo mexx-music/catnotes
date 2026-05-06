@@ -21,7 +21,10 @@ class _PawTiledPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (alpha == 0) return;
-    final textStyle = TextStyle(fontSize: 18, color: Color.fromRGBO(0, 0, 0, alpha));
+    final textStyle = TextStyle(
+      fontSize: 18,
+      color: Color.fromRGBO(0, 0, 0, alpha),
+    );
     final tp = TextPainter(textDirection: TextDirection.ltr);
     for (double y = 16; y < size.height; y += 40) {
       for (double x = (y ~/ 40).isEven ? 20 : 40; x < size.width; x += 60) {

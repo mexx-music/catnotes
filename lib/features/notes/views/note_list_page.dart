@@ -18,9 +18,10 @@ class LoadingDeleteNotifier extends StateNotifier<Map<String, bool>> {
   }
 }
 
-final loadingDeleteProvider = StateNotifierProvider<LoadingDeleteNotifier, Map<String, bool>>(
-  (ref) => LoadingDeleteNotifier(),
-);
+final loadingDeleteProvider =
+    StateNotifierProvider<LoadingDeleteNotifier, Map<String, bool>>(
+      (ref) => LoadingDeleteNotifier(),
+    );
 
 class NoteListPage extends ConsumerWidget {
   const NoteListPage({super.key});
@@ -47,11 +48,9 @@ class NoteListPage extends ConsumerWidget {
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => NoteEditorScaffold(),
-            ),
-          );
+          Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (_) => NoteEditorScaffold()));
         },
         child: const Icon(Icons.add),
         tooltip: AppLocalizations.of(context)!.newNote,
@@ -91,7 +90,9 @@ class NoteListPage extends ConsumerWidget {
                       itemBuilder: (_, i) {
                         final note = items[i];
                         final isDeleting = loadingDelete[note.id] == true;
-                        logd('[DEBUG] itemBuilder: id=${note.id}, title=${note.title}');
+                        logd(
+                          '[DEBUG] itemBuilder: id=${note.id}, title=${note.title}',
+                        );
                         return Row(
                           children: [
                             Expanded(
@@ -110,33 +111,59 @@ class NoteListPage extends ConsumerWidget {
                               onPressed: isDeleting
                                   ? null
                                   : () async {
-                                      ref.read(loadingDeleteProvider.notifier).setDeleting(note.id, true);
+                                      ref
+                                          .read(loadingDeleteProvider.notifier)
+                                          .setDeleting(note.id, true);
                                       try {
-                                        logd('[DEBUG] Lösche Notiz: id=${note.id}, title=${note.title}');
+                                        logd(
+                                          '[DEBUG] Lösche Notiz: id=${note.id}, title=${note.title}',
+                                        );
                                         await repo.delete(note.id);
                                         if (context.mounted) {
-                                          ScaffoldMessenger.of(context).clearSnackBars();
-                                          ScaffoldMessenger.of(context).showSnackBar(
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).clearSnackBars();
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
                                             SnackBar(
-                                              content: Text(AppLocalizations.of(context)!.noteDeleted),
+                                              content: Text(
+                                                AppLocalizations.of(
+                                                  context,
+                                                )!.noteDeleted,
+                                              ),
                                               action: SnackBarAction(
-                                                label: AppLocalizations.of(context)!.undo,
+                                                label: AppLocalizations.of(
+                                                  context,
+                                                )!.undo,
                                                 onPressed: () async {
                                                   await repo.upsert(note);
                                                 },
                                               ),
-                                              duration: const Duration(seconds: 5),
+                                              duration: const Duration(
+                                                seconds: 5,
+                                              ),
                                             ),
                                           );
                                         }
                                       } catch (e) {
                                         if (context.mounted) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(content: Text('${AppLocalizations.of(context)!.deleteError}: $e')),
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                '${AppLocalizations.of(context)!.deleteError}: $e',
+                                              ),
+                                            ),
                                           );
                                         }
                                       } finally {
-                                        ref.read(loadingDeleteProvider.notifier).setDeleting(note.id, false);
+                                        ref
+                                            .read(
+                                              loadingDeleteProvider.notifier,
+                                            )
+                                            .setDeleting(note.id, false);
                                       }
                                     },
                             ),

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
-import '../../../core/text_zoom/text_zoom_controls.dart';
 import '../../../core/text_zoom/text_zoom_scope.dart';
 import '../../../data/models/note.dart';
 import '../../../data/repos/note_repository.dart';
+import '../../../features/senior_cat/senior_cat_button.dart';
 import 'package:catnotes/l10n/app_localizations.dart';
 
 class NoteEditorPage extends StatelessWidget {
@@ -15,9 +15,7 @@ class NoteEditorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('DEBUG: Editor minimal'),
-    );
+    return const Center(child: Text('DEBUG: Editor minimal'));
   }
 }
 
@@ -89,46 +87,61 @@ class _NoteEditorScaffoldState extends ConsumerState<NoteEditorScaffold> {
   Widget build(BuildContext context) {
     final controller = TextZoomScope.of(context);
     final textStyle = TextStyle(fontSize: controller.size);
-    return TextZoomControls(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            tooltip: AppLocalizations.of(context)!.back,
-            onPressed: () => context.go('/'),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          tooltip: AppLocalizations.of(context)!.back,
+          onPressed: () => context.go('/'),
+        ),
+        title: Text(AppLocalizations.of(context)!.editorTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.save),
+            tooltip: AppLocalizations.of(context)!.save,
+            onPressed: _saveNote,
           ),
-          title: Text(AppLocalizations.of(context)!.editorTitle),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.save),
-              tooltip: AppLocalizations.of(context)!.save,
-              onPressed: _saveNote,
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _saveNote,
-          child: const Icon(Icons.pets, size: 28),
-          tooltip: AppLocalizations.of(context)!.save,
-        ),
-        body: Column(
-          children: [
-            TextField(
-              controller: _title,
-              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.titleLabel),
-              style: textStyle,
-            ),
-            const SizedBox(height: 12),
-            Expanded(
-              child: TextField(
-                controller: _body,
-                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.bodyLabel),
-                maxLines: null,
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _saveNote,
+        child: const Icon(Icons.pets, size: 28),
+        tooltip: AppLocalizations.of(context)!.save,
+      ),
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              TextField(
+                controller: _title,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.titleLabel,
+                ),
                 style: textStyle,
               ),
+              const SizedBox(height: 12),
+              Expanded(
+                child: TextField(
+                  controller: _body,
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.bodyLabel,
+                  ),
+                  maxLines: null,
+                  style: textStyle,
+                ),
+              ),
+            ],
+          ),
+          // Senior-Cat Button in der unteren linken Ecke
+          Positioned(
+            left: 12,
+            bottom: 12,
+            child: SeniorCatButton(
+              getTitleText: () => _title.text,
+              getBodyText: () => _body.text,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

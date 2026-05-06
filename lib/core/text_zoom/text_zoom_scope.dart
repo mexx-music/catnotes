@@ -14,4 +14,3 @@ class TextZoomScope extends InheritedNotifier<TextZoomController> {
     return scope!.notifier!;
   }
 }
-

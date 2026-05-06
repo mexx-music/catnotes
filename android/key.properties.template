@@ -1,0 +1,17 @@
+# Copy this file to key.properties and fill it with your release keystore values.
+# Make sure to keep `key.properties` out of version control (add to .gitignore).
+# Example (use absolute path for storeFile or path relative to android/):
+# storeFile=/Users/you/keystores/catnotes-release.jks
+# storePassword=your_store_password
+# keyAlias=your_key_alias
+# keyPassword=your_key_password
+
+# If you don't have a keystore yet, create one with:
+# keytool -genkeypair -v -keystore /path/to/catnotes-release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias your_key_alias
+
+# After creating, copy and fill the fields below (uncomment and set the values):
+# storeFile=/absolute/or/relative/path/to/catnotes-release.jks
+# storePassword=CHANGE_ME
+# keyAlias=CHANGE_ME
+# keyPassword=CHANGE_ME
+

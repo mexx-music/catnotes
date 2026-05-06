@@ -11,26 +11,39 @@ class Notifications {
     InitializationSettings settings;
     if (Platform.isMacOS) {
       const macos = DarwinInitializationSettings();
-      settings = const InitializationSettings(android: android, iOS: ios, macOS: macos);
+      settings = const InitializationSettings(
+        android: android,
+        iOS: ios,
+        macOS: macos,
+      );
     } else {
       settings = const InitializationSettings(android: android, iOS: ios);
     }
     await _plugin.initialize(settings);
   }
 
-  static Future<void> schedule(String id, String title, String body, DateTime dateTime) async {
+  static Future<void> schedule(
+    String id,
+    String title,
+    String body,
+    DateTime dateTime,
+  ) async {
     await _plugin.zonedSchedule(
       id.hashCode,
       title,
       body,
       tz.TZDateTime.from(dateTime, tz.local),
       const NotificationDetails(
-        android: AndroidNotificationDetails('cat_notes_reminders', 'Cat Notes Reminders'),
+        android: AndroidNotificationDetails(
+          'cat_notes_reminders',
+          'Cat Notes Reminders',
+        ),
         iOS: DarwinNotificationDetails(),
         macOS: DarwinNotificationDetails(),
       ),
       androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.dateAndTime,
     );
   }

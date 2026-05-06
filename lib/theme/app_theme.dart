@@ -12,26 +12,31 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
     cardTheme: cardThemeData,
     textTheme: const TextTheme(
-      headlineSmall: TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Roboto', letterSpacing: 0.5),
+      headlineSmall: TextStyle(
+        fontWeight: FontWeight.w600,
+        fontFamily: 'Roboto',
+        letterSpacing: 0.5,
+      ),
     ),
-    appBarTheme: const AppBarTheme(
-      elevation: 0,
-      centerTitle: true,
-    ),
+    appBarTheme: const AppBarTheme(elevation: 0, centerTitle: true),
     useMaterial3: false,
   );
 
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple, brightness: Brightness.dark),
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.deepPurple,
+      brightness: Brightness.dark,
+    ),
     cardTheme: cardThemeData,
     textTheme: const TextTheme(
-      headlineSmall: TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Roboto', letterSpacing: 0.5),
+      headlineSmall: TextStyle(
+        fontWeight: FontWeight.w600,
+        fontFamily: 'Roboto',
+        letterSpacing: 0.5,
+      ),
     ),
-    appBarTheme: const AppBarTheme(
-      elevation: 0,
-      centerTitle: true,
-    ),
+    appBarTheme: const AppBarTheme(elevation: 0, centerTitle: true),
     useMaterial3: false,
   );
 }

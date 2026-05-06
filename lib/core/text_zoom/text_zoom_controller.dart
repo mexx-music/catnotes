@@ -33,4 +33,3 @@ class TextZoomController extends ChangeNotifier {
     notifyListeners();
   }
 }
-

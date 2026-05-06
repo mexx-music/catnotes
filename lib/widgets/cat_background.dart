@@ -15,11 +15,11 @@ class CatBackground extends StatelessWidget {
           colors: isDark
               ? [const Color(0xFF121212), const Color(0xFF141520)]
               : [const Color(0xFFF9F7F6), const Color(0xFFF6F5F9)],
-          begin: Alignment.topLeft, end: Alignment.bottomRight,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
       ),
       child: child,
     );
   }
 }
-

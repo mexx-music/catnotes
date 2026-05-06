@@ -35,7 +35,9 @@ class NoteCard extends ConsumerWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            note.title.isEmpty ? AppLocalizations.of(context)!.withoutTitle : note.title,
+                            note.title.isEmpty
+                                ? AppLocalizations.of(context)!.withoutTitle
+                                : note.title,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -59,7 +61,9 @@ class NoteCard extends ConsumerWidget {
                     CatBadges(seed: note.id),
                     const SizedBox(height: 8),
                     ZoomableMessageText(
-                      note.body.isEmpty ? AppLocalizations.of(context)!.emptyState : note.body,
+                      note.body.isEmpty
+                          ? AppLocalizations.of(context)!.emptyState
+                          : note.body,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyMedium,

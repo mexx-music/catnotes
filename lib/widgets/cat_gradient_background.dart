@@ -59,14 +59,19 @@ class CatGradientBackground extends StatelessWidget {
                       Text(
                         'Noch keine Notizen 🐾\nDie Katze hält den Block bereit!',
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
                               color: isDark
                                   ? Colors.white.withOpacity(0.55)
                                   : Colors.black.withOpacity(0.55),
                             ),
                       ),
                       const SizedBox(height: 8),
-                      Icon(Icons.pets, size: 36, color: isDark ? Colors.white38 : Colors.black26),
+                      Icon(
+                        Icons.pets,
+                        size: 36,
+                        color: isDark ? Colors.white38 : Colors.black26,
+                      ),
                     ],
                   ),
                 ),
@@ -103,11 +108,7 @@ class _PawOverlay extends StatelessWidget {
                   Positioned(
                     left: x * pawSpacing + (y.isEven ? 0 : pawSpacing / 2),
                     top: y * pawSpacing,
-                    child: Icon(
-                      Icons.pets,
-                      size: pawSize,
-                      color: pawColor,
-                    ),
+                    child: Icon(Icons.pets, size: pawSize, color: pawColor),
                   ),
             ],
           );

@@ -38,9 +38,9 @@ class SettingsPage extends ConsumerWidget {
               final json = await repo.exportJson();
               await Clipboard.setData(ClipboardData(text: json));
               if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Backup kopiert')),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text('Backup kopiert')));
               }
             },
           ),
@@ -56,11 +56,19 @@ class SettingsPage extends ConsumerWidget {
                   content: TextField(
                     controller: controller,
                     maxLines: null,
-                    decoration: const InputDecoration(hintText: 'JSON hier einfügen'),
+                    decoration: const InputDecoration(
+                      hintText: 'JSON hier einfügen',
+                    ),
                   ),
                   actions: [
-                    TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Abbrechen')),
-                    ElevatedButton(onPressed: () => Navigator.pop(context, true), child: const Text('Importieren')),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: const Text('Abbrechen'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      child: const Text('Importieren'),
+                    ),
                   ],
                 ),
               );

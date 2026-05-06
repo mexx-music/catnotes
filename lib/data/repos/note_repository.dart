@@ -20,7 +20,9 @@ class NoteRepository {
   Stream<List<Note>> watchAll({bool pinnedFirst = true}) {
     final listenable = _box.listenable();
     return Stream<List<Note>>.multi((controller) {
-      void emit() => controller.add(_sorted(_box.values.toList(), pinnedFirst: pinnedFirst));
+      void emit() => controller.add(
+        _sorted(_box.values.toList(), pinnedFirst: pinnedFirst),
+      );
       emit();
       listenable.addListener(emit);
       controller.onCancel = () => listenable.removeListener(emit);
@@ -42,7 +44,7 @@ class NoteRepository {
     'updatedAt': n.updatedAt.toIso8601String(),
   };
 
-  Note _fromMap(Map<String,dynamic> m) => Note(
+  Note _fromMap(Map<String, dynamic> m) => Note(
     id: m['id'] as String,
     title: (m['title'] ?? '') as String,
     body: (m['body'] ?? '') as String,
@@ -64,7 +66,7 @@ class NoteRepository {
     if (decoded is! List) return 0;
     var count = 0;
     for (final e in decoded) {
-      final note = _fromMap(Map<String,dynamic>.from(e as Map));
+      final note = _fromMap(Map<String, dynamic>.from(e as Map));
       await _box.put(note.id, note);
       count++;
     }

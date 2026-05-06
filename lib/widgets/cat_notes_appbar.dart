@@ -38,21 +38,20 @@ class CatNotesAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           catWithNotes(),
           const SizedBox(width: 8),
-          Text(
-            'Cat Notes',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          Text('Cat Notes', style: Theme.of(context).textTheme.titleLarge),
         ],
       ),
       actions: actions,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(8),
-        child: Builder(builder: (context) {
-          // leichte Anpassung nach Flair-Level
-          final isDark = Theme.of(context).brightness == Brightness.dark;
-          final base = isDark ? 0.14 : 0.10;
-          return Opacity(opacity: base, child: const PawDivider());
-        }),
+        child: Builder(
+          builder: (context) {
+            // leichte Anpassung nach Flair-Level
+            final isDark = Theme.of(context).brightness == Brightness.dark;
+            final base = isDark ? 0.14 : 0.10;
+            return Opacity(opacity: base, child: const PawDivider());
+          },
+        ),
       ),
     );
   }

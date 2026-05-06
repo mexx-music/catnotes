@@ -8,7 +8,13 @@ class ZoomableMessageText extends StatelessWidget {
   final TextOverflow? overflow;
   final TextStyle? style;
   const ZoomableMessageText(
-    this.text, {super.key, this.textAlign, this.maxLines, this.overflow, this.style});
+    this.text, {
+    super.key,
+    this.textAlign,
+    this.maxLines,
+    this.overflow,
+    this.style,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,4 +32,3 @@ class ZoomableMessageText extends StatelessWidget {
     );
   }
 }
-

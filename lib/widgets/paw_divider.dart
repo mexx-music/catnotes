@@ -33,7 +33,7 @@ class _PawLinePainter extends CustomPainter {
       x += tp.width + 10;
     }
   }
+
   @override
-  bool shouldRepaint(covariant _PawLinePainter old) =>
-      old.opacity != opacity;
+  bool shouldRepaint(covariant _PawLinePainter old) => old.opacity != opacity;
 }

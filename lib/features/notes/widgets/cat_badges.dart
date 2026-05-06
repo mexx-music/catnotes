@@ -8,13 +8,23 @@ class CatBadges extends StatelessWidget {
   final String seed;
 
   static const _emojis = [
-    '🐾','🐱','😺','🐈','🐈‍⬛','🧶','👑','🌙','✨'
+    '🐾',
+    '🐱',
+    '😺',
+    '🐈',
+    '🐈‍⬛',
+    '🧶',
+    '👑',
+    '🌙',
+    '✨',
   ];
 
   List<String> _pickBadges(String s, {int count = 3}) {
     // deterministische Auswahl
     int h = 0;
-    for (final r in s.runes) { h = (h * 31 + r) & 0x7fffffff; }
+    for (final r in s.runes) {
+      h = (h * 31 + r) & 0x7fffffff;
+    }
     final out = <String>[];
     for (var i = 0; i < count; i++) {
       out.add(_emojis[(h + i * 7) % _emojis.length]);

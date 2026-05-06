@@ -2,7 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/note.dart';
 import '../../../data/repos/note_repository.dart';
 
-final noteListControllerProvider = AsyncNotifierProvider<NoteListController, List<Note>>(NoteListController.new);
+final noteListControllerProvider =
+    AsyncNotifierProvider<NoteListController, List<Note>>(
+      NoteListController.new,
+    );
 
 class NoteListController extends AsyncNotifier<List<Note>> {
   String _query = '';
@@ -15,7 +18,9 @@ class NoteListController extends AsyncNotifier<List<Note>> {
     var notes = await repo.getAll();
     // Filter by query (title or body)
     if (_query.isNotEmpty) {
-      notes = notes.where((n) => n.title.contains(_query) || n.body.contains(_query)).toList();
+      notes = notes
+          .where((n) => n.title.contains(_query) || n.body.contains(_query))
+          .toList();
     }
     // Filter by active tag
     if (_activeTag != null) {
@@ -54,7 +59,10 @@ class NoteListController extends AsyncNotifier<List<Note>> {
     final repo = ref.read(noteRepositoryProvider);
     final note = repo.getById(noteId);
     if (note != null) {
-      final updated = note.copyWith(isPinned: !note.isPinned, updatedAt: DateTime.now());
+      final updated = note.copyWith(
+        isPinned: !note.isPinned,
+        updatedAt: DateTime.now(),
+      );
       await repo.upsert(updated);
       refresh();
     }

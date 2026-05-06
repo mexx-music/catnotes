@@ -8,10 +8,19 @@ class BouncyCatFab extends StatefulWidget {
   State<BouncyCatFab> createState() => _BouncyCatFabState();
 }
 
-class _BouncyCatFabState extends State<BouncyCatFab> with SingleTickerProviderStateMixin {
+class _BouncyCatFabState extends State<BouncyCatFab>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _c = AnimationController(
-    vsync: this, duration: const Duration(milliseconds: 140), lowerBound: 0.0, upperBound: 0.10);
-  @override void dispose() { _c.dispose(); super.dispose(); }
+    vsync: this,
+    duration: const Duration(milliseconds: 140),
+    lowerBound: 0.0,
+    upperBound: 0.10,
+  );
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

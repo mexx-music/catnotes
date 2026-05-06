@@ -12,4 +12,3 @@ class HiveService {
 
   static Box<Note> get notesBox => Hive.box<Note>(notesBoxName);
 }
-

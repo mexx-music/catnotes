@@ -4,4 +4,3 @@ import '../../../data/repos/note_repository.dart';
 final noteRepositoryProvider = Provider<NoteRepository>((ref) {
   throw UnimplementedError('noteRepositoryProvider must be overridden in main');
 });
-

@@ -12,11 +12,18 @@ Widget _app(Locale locale) => MaterialApp(
     GlobalCupertinoLocalizations.delegate,
   ],
   supportedLocales: const [
-    Locale('en'), Locale('de'), Locale('it'),
-    Locale('es'), Locale('ja'), Locale('zh'),
+    Locale('en'),
+    Locale('de'),
+    Locale('it'),
+    Locale('es'),
+    Locale('ja'),
+    Locale('zh'),
   ],
   home: Builder(
-    builder: (ctx) => Text(AppLocalizations.of(ctx)!.notesTitle, textDirection: TextDirection.ltr),
+    builder: (ctx) => Text(
+      AppLocalizations.of(ctx)!.notesTitle,
+      textDirection: TextDirection.ltr,
+    ),
   ),
 );
 
@@ -31,4 +38,3 @@ void main() {
     expect(find.byType(Text), findsOneWidget);
   });
 }
-

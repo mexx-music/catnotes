@@ -11,7 +11,11 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   testWidgets('App minimal smoke test', (WidgetTester tester) async {
     // Build a minimal MaterialApp to ensure widgets can render
-    await tester.pumpWidget(const MaterialApp(home: Scaffold(body: Center(child: Text('ok')))));
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(body: Center(child: Text('ok'))),
+      ),
+    );
     await tester.pumpAndSettle();
     expect(find.text('ok'), findsOneWidget);
   });

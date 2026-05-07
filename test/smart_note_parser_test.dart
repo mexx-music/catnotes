@@ -44,5 +44,42 @@ void main() {
       expect(r.title, 'Einkauf');
       expect(r.content, 'Milch');
     });
+
+    // Doppelpunkt-Hook
+    test('Doppelpunkt trennt Titel und Inhalt', () {
+      final r = parseSmartNoteInput('Futter: morgen Katzenfutter kaufen');
+      expect(r.title, 'Futter');
+      expect(r.content, 'morgen Katzenfutter kaufen');
+    });
+
+    test('Doppelpunkt mit mehreren Wörtern im Inhalt', () {
+      final r = parseSmartNoteInput('Werkstatt: Reifen prüfen, Öl kontrollieren');
+      expect(r.title, 'Werkstatt');
+      expect(r.content, 'Reifen prüfen, Öl kontrollieren');
+    });
+
+    test('Doppelpunkt im Inhalt – nur erster trennt (Zeit mit Uhrzeit)', () {
+      final r = parseSmartNoteInput('Zeit: 10:30 Uhr');
+      expect(r.title, 'Zeit');
+      expect(r.content, '10:30 Uhr');
+    });
+
+    test('Doppelpunkt am Anfang – kein Split, normale Logik', () {
+      final r = parseSmartNoteInput(':Kein Titel');
+      expect(r.title, ':Kein Titel');
+      expect(r.content, '');
+    });
+
+    test('Doppelpunkt-Hook mit weiteren Zeilen im Inhalt', () {
+      final r = parseSmartNoteInput('Futter: morgen\nZusatz: Leckerli');
+      expect(r.title, 'Futter');
+      expect(r.content, 'morgen\nZusatz: Leckerli');
+    });
+
+    test('expliziter Titel:-Prefix schlägt Doppelpunkt-Hook (Regression)', () {
+      final r = parseSmartNoteInput('Titel: Werkstatt');
+      expect(r.title, 'Werkstatt');
+      expect(r.content, '');
+    });
   });
 }

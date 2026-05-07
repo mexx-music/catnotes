@@ -23,10 +23,11 @@ final _newline = RegExp(r'\r\n|\r|\n');
 
 /// Parst freien Text in Titel + Inhalt.
 ///
-/// Regeln (in dieser Reihenfolge):
-/// 1. "Titel: X" in erster Zeile → Titel = X, Rest = Inhalt (Inhalt:-Prefix wird entfernt)
-/// 2. Mehrzeilig ohne Prefix → erste Zeile = Titel, Rest = Inhalt
-/// 3. Einzeilig → Titel = Text, Inhalt = leer
+/// Reihenfolge:
+/// 1. Expliziter "Titel:"-Prefix → Titel = Wert, Rest = Inhalt (Inhalt:-Prefix wird entfernt)
+/// 2. Doppelpunkt-Hook → erster ":" in der ersten Zeile trennt Titel und Inhalt
+/// 3. Mehrzeilig → erste Zeile = Titel, Rest = Inhalt
+/// 4. Einzeilig → Titel = Text, Inhalt = leer
 SmartNoteDraft parseSmartNoteInput(String raw) {
   final text = raw.trim();
   if (text.isEmpty) return const SmartNoteDraft(title: '', content: '');
@@ -36,26 +37,37 @@ SmartNoteDraft parseSmartNoteInput(String raw) {
 
   if (lines.isEmpty) return const SmartNoteDraft(title: '', content: '');
 
-  if (lines.length == 1) {
-    final line = lines.first;
-    if (_hasPrefix(line, _titlePrefixes)) {
-      return SmartNoteDraft(title: _stripPrefix(line, _titlePrefixes), content: '');
-    }
-    return SmartNoteDraft(title: line, content: '');
-  }
+  final firstLine = lines.first;
 
-  // Expliziter "Titel:"-Prefix in der ersten Zeile
-  if (_hasPrefix(lines.first, _titlePrefixes)) {
-    final title = _stripPrefix(lines.first, _titlePrefixes);
+  // 1. Expliziter "Titel:"-Prefix (z.B. "Titel: Werkstatt\nInhalt: ...")
+  if (_hasPrefix(firstLine, _titlePrefixes)) {
+    final title = _stripPrefix(firstLine, _titlePrefixes);
     final contentLines = lines.skip(1).map((l) {
       return _hasPrefix(l, _contentPrefixes) ? _stripPrefix(l, _contentPrefixes) : l;
     }).toList();
     return SmartNoteDraft(title: title, content: contentLines.join('\n'));
   }
 
-  // Standard: erste Zeile = Titel, Rest = Inhalt
-  return SmartNoteDraft(
-    title: lines.first,
-    content: lines.skip(1).join('\n'),
-  );
+  // 2. Doppelpunkt-Hook (z.B. "Futter: morgen Katzenfutter kaufen")
+  //    Gilt nur wenn vor dem Doppelpunkt etwas Nicht-Leeres steht (colonIdx > 0).
+  final colonIdx = firstLine.indexOf(':');
+  if (colonIdx > 0) {
+    final beforeColon = firstLine.substring(0, colonIdx).trim();
+    if (beforeColon.isNotEmpty) {
+      final afterColon = firstLine.substring(colonIdx + 1).trim();
+      final contentParts = [
+        if (afterColon.isNotEmpty) afterColon,
+        ...lines.skip(1),
+      ];
+      return SmartNoteDraft(title: beforeColon, content: contentParts.join('\n'));
+    }
+  }
+
+  // 3. Mehrzeilig → erste Zeile = Titel, Rest = Inhalt
+  if (lines.length > 1) {
+    return SmartNoteDraft(title: firstLine, content: lines.skip(1).join('\n'));
+  }
+
+  // 4. Einzeiler → Titel = Text, Inhalt leer
+  return SmartNoteDraft(title: firstLine, content: '');
 }

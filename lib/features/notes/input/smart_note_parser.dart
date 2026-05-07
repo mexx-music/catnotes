@@ -18,6 +18,9 @@ String _stripPrefix(String line, List<String> prefixes) {
   return line.trim();
 }
 
+// Trennt auf \n, \r\n und \r (iOS/macOS-Diktat liefert teils nur \r).
+final _newline = RegExp(r'\r\n|\r|\n');
+
 /// Parst freien Text in Titel + Inhalt.
 ///
 /// Regeln (in dieser Reihenfolge):
@@ -29,7 +32,7 @@ SmartNoteDraft parseSmartNoteInput(String raw) {
   if (text.isEmpty) return const SmartNoteDraft(title: '', content: '');
 
   final lines =
-      text.split('\n').map((l) => l.trim()).where((l) => l.isNotEmpty).toList();
+      text.split(_newline).map((l) => l.trim()).where((l) => l.isNotEmpty).toList();
 
   if (lines.isEmpty) return const SmartNoteDraft(title: '', content: '');
 

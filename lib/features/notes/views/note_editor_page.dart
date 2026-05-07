@@ -7,6 +7,8 @@ import '../../../core/text_zoom/text_zoom_scope.dart';
 import '../../../data/models/note.dart';
 import '../../../data/repos/note_repository.dart';
 import '../../../features/senior_cat/senior_cat_button.dart';
+import '../input/smart_note_input.dart';
+import '../input/smart_note_parser.dart';
 import 'package:catnotes/l10n/app_localizations.dart';
 
 class NoteEditorPage extends StatelessWidget {
@@ -47,6 +49,22 @@ class _NoteEditorScaffoldState extends ConsumerState<NoteEditorScaffold> {
     }
   }
 
+  void _applySmartDraft(SmartNoteDraft draft) {
+    _title.text = draft.title;
+    _body.text = draft.content;
+  }
+
+  // Korrekte Rücknavigation für beide Einstiegspfade:
+  // Navigator.push() (FAB in NoteListPage) → pop()
+  // GoRouter /edit → go('/')
+  void _navigateBack() {
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    } else {
+      context.go('/');
+    }
+  }
+
   Future<void> _saveNote() async {
     final title = _title.text.trim();
     final body = _body.text.trim();
@@ -65,15 +83,7 @@ class _NoteEditorScaffoldState extends ConsumerState<NoteEditorScaffold> {
       updatedAt: now,
     );
     await repo.upsert(note);
-    if (mounted) {
-      // Prüfe, ob GoRouter verwendet wird
-      final routeName = ModalRoute.of(context)?.settings.name;
-      if (routeName != null) {
-        context.go('/');
-      } else {
-        Navigator.of(context).pop();
-      }
-    }
+    if (mounted) _navigateBack();
   }
 
   @override
@@ -92,7 +102,7 @@ class _NoteEditorScaffoldState extends ConsumerState<NoteEditorScaffold> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           tooltip: AppLocalizations.of(context)!.back,
-          onPressed: () => context.go('/'),
+          onPressed: _navigateBack,
         ),
         title: Text(AppLocalizations.of(context)!.editorTitle),
         actions: [
@@ -105,32 +115,48 @@ class _NoteEditorScaffoldState extends ConsumerState<NoteEditorScaffold> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _saveNote,
-        child: const Icon(Icons.pets, size: 28),
         tooltip: AppLocalizations.of(context)!.save,
+        child: const Icon(Icons.pets, size: 28),
       ),
       body: Stack(
         children: [
-          Column(
-            children: [
-              TextField(
-                controller: _title,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.titleLabel,
+          // Scrollbar verhindert Overflow wenn Tastatur aufgeht
+          SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SmartNoteInput(
+                  onApply: _applySmartDraft,
+                  onApplyAsContent: (content) => _body.text = content,
                 ),
-                style: textStyle,
-              ),
-              const SizedBox(height: 12),
-              Expanded(
-                child: TextField(
-                  controller: _body,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.bodyLabel,
+                const Divider(height: 1),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: TextField(
+                    controller: _title,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.titleLabel,
+                    ),
+                    style: textStyle,
                   ),
-                  maxLines: null,
-                  style: textStyle,
                 ),
-              ),
-            ],
+                const SizedBox(height: 12),
+                Padding(
+                  // Unten extra Platz für FAB + SeniorCatButton
+                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 100),
+                  child: TextField(
+                    controller: _body,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.bodyLabel,
+                    ),
+                    maxLines: null,
+                    minLines: 8,
+                    style: textStyle,
+                  ),
+                ),
+              ],
+            ),
           ),
           // Senior-Cat Button in der unteren linken Ecke
           Positioned(

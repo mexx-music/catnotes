@@ -10,7 +10,7 @@ import '../../../core/text_zoom/zoomable_message_text.dart';
 import 'package:catnotes/l10n/app_localizations.dart';
 import 'package:catnotes/core/log.dart';
 
-class NoteCard extends ConsumerWidget {
+class NoteCard extends ConsumerStatefulWidget {
   const NoteCard({
     super.key,
     required this.note,
@@ -24,81 +24,131 @@ class NoteCard extends ConsumerWidget {
   final bool isDeleting;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<NoteCard> createState() => _NoteCardState();
+}
+
+class _NoteCardState extends ConsumerState<NoteCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ac;
+  late final Animation<double> _fade;
+  late final Animation<Offset> _slide;
+
+  @override
+  void initState() {
+    super.initState();
+    _ac = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 380),
+    );
+    _fade = CurvedAnimation(parent: _ac, curve: Curves.easeOut);
+    _slide = Tween<Offset>(
+      begin: const Offset(0, 0.06),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _ac, curve: Curves.easeOutCubic));
+    _ac.forward();
+  }
+
+  @override
+  void dispose() {
+    _ac.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final flair = ref.watch(catFlairProvider);
-    logd('NoteCard build: id=${note.id}, title=${note.title}');
-    return Card(
-      child: InkWell(
-        onTap: onTap,
-        child: Stack(
-          children: [
-            Positioned.fill(child: PawWatermark(intensity: flair)),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+    logd('NoteCard build: id=${widget.note.id}, title=${widget.note.title}');
+    return FadeTransition(
+      opacity: _fade,
+      child: SlideTransition(
+        position: _slide,
+        child: Card(
+          child: InkWell(
+            onTap: widget.onTap,
+            child: Stack(
               children: [
-                // Senior-Cat-Button links – stoppt Propagation zur Karte
-                _SeniorCatCardButton(note: note),
-                // Notizinhalt mittig
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                Positioned.fill(child: PawWatermark(intensity: flair)),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _SeniorCatCardButton(note: widget.note),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 8,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Text(
-                                note.title.isEmpty
-                                    ? AppLocalizations.of(context)!.withoutTitle
-                                    : note.title,
-                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    widget.note.title.isEmpty
+                                        ? AppLocalizations.of(context)!
+                                            .withoutTitle
+                                        : widget.note.title,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                                if (widget.note.isPinned)
+                                  const Icon(Icons.push_pin, size: 16),
+                              ],
                             ),
-                            if (note.isPinned)
-                              const Icon(Icons.push_pin, size: 16),
+                            const SizedBox(height: 6),
+                            CatBadges(seed: widget.note.id),
+                            const SizedBox(height: 8),
+                            ZoomableMessageText(
+                              widget.note.body.isEmpty
+                                  ? AppLocalizations.of(context)!.emptyState
+                                  : widget.note.body,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
                           ],
                         ),
-                        const SizedBox(height: 6),
-                        CatBadges(seed: note.id),
-                        const SizedBox(height: 8),
-                        ZoomableMessageText(
-                          note.body.isEmpty
-                              ? AppLocalizations.of(context)!.emptyState
-                              : note.body,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: widget.onDelete,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: widget.isDeleting
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Icon(
+                                  Icons.delete_outline,
+                                  color:
+                                      Theme.of(context).colorScheme.error,
+                                  size: 22,
+                                ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-                // Delete-Button rechts – stoppt Propagation zur Karte
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: onDelete,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: isDeleting
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error, size: 22),
-                    ),
-                  ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

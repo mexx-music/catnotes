@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/note.dart';
+import '../../../theme/app_theme.dart';
 import '../widgets/note_card.dart';
 import 'package:go_router/go_router.dart';
 import 'package:catnotes/data/repos/note_repository.dart';
@@ -34,16 +35,42 @@ class NoteListPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 0,
         leading: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(12, 6, 0, 6),
           child: Image.asset(
             'assets/images/cat_notes_holder.png',
-            width: 32,
-            height: 32,
             fit: BoxFit.contain,
           ),
         ),
-        title: Text(AppLocalizations.of(context)!.notesTitle),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'CatNotes',
+                style: TextStyle(
+                  color: CatColors.primary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.3,
+                  height: 1.1,
+                ),
+              ),
+              Text(
+                AppLocalizations.of(context)!.notesTitle,
+                style: const TextStyle(
+                  color: CatColors.textMid,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  height: 1.2,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

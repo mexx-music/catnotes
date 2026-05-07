@@ -34,12 +34,12 @@ class CatBadges extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logd('CatBadges build: seed=${seed}');
+    logd('CatBadges build: seed=$seed');
     final badges = _pickBadges(seed);
     final style = Theme.of(context).textTheme.bodySmall?.copyWith(
       height: 1.1,
-      fontSize: 32, // deutlich größer
-      color: Colors.black.withOpacity(0.18), // sehr transparent
+      fontSize: 32,
+      color: Colors.black.withValues(alpha: 0.18),
     );
     return Wrap(
       spacing: 6,

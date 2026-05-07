@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../theme/app_theme.dart';
 
 class PawWatermark extends StatelessWidget {
   const PawWatermark({super.key, required this.intensity});
@@ -6,7 +7,7 @@ class PawWatermark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final alpha = [0.0, 0.05, 0.07, 0.09][intensity.clamp(0, 3)];
+    final alpha = [0.0, 0.06, 0.09, 0.12][intensity.clamp(0, 3)];
     return IgnorePointer(
       ignoring: true,
       child: CustomPaint(painter: _PawTiledPainter(alpha)),
@@ -23,7 +24,8 @@ class _PawTiledPainter extends CustomPainter {
     if (alpha == 0) return;
     final textStyle = TextStyle(
       fontSize: 18,
-      color: Color.fromRGBO(0, 0, 0, alpha),
+      // Lila statt Schwarz — passend zum CatNotes Brand
+      color: CatColors.primary.withValues(alpha: alpha),
     );
     final tp = TextPainter(textDirection: TextDirection.ltr);
     for (double y = 16; y < size.height; y += 40) {

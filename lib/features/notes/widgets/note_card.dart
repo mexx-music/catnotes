@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../data/models/note.dart';
+import '../../../theme/app_theme.dart';
 import 'cat_badges.dart';
 import 'paw_watermark.dart';
 import '../../settings/controllers/cat_flair_provider.dart';
@@ -51,17 +52,8 @@ class NoteCard extends ConsumerWidget {
                                 note.title.isEmpty
                                     ? AppLocalizations.of(context)!.withoutTitle
                                     : note.title,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  color: Colors.deepPurple,
-                                  shadows: [
-                                    Shadow(
-                                      offset: Offset(0.5, 0.5),
-                                      blurRadius: 1,
-                                      color: Colors.black26,
-                                    ),
-                                  ],
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -100,7 +92,7 @@ class NoteCard extends ConsumerWidget {
                               height: 20,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : const Icon(Icons.delete_outline, color: Colors.redAccent, size: 22),
+                          : Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error, size: 22),
                     ),
                   ),
                 ),
@@ -131,12 +123,12 @@ class _SeniorCatCardButton extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.deepPurple.shade50,
-          borderRadius: BorderRadius.circular(10),
+          color: CatColors.primaryLight,
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Icon(
-          Icons.visibility,
-          color: Colors.deepPurple.shade400,
+          Icons.auto_stories_rounded,
+          color: CatColors.primary,
           size: 24,
         ),
       ),

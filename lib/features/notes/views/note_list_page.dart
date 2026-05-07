@@ -45,15 +45,14 @@ class NoteListPage extends ConsumerWidget {
         ),
         title: Text(AppLocalizations.of(context)!.notesTitle),
       ),
-      backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(
             context,
           ).push(MaterialPageRoute(builder: (_) => NoteEditorScaffold()));
         },
-        child: const Icon(Icons.add),
         tooltip: AppLocalizations.of(context)!.newNote,
+        child: const Icon(Icons.edit_outlined),
       ),
       body: FutureBuilder(
         future: repo.getAll(),

@@ -93,81 +93,63 @@ class NoteListPage extends ConsumerWidget {
                         logd(
                           '[DEBUG] itemBuilder: id=${note.id}, title=${note.title}',
                         );
-                        return Row(
-                          children: [
-                            Expanded(
-                              child: NoteCard(
-                                note: note,
-                                onTap: () {
-                                  context.go('/edit', extra: note.id);
+                        return NoteCard(
+                          note: note,
+                          isDeleting: isDeleting,
+                          onTap: () => context.go('/edit', extra: note.id),
+                          onDelete: isDeleting
+                              ? null
+                              : () async {
+                                  ref
+                                      .read(loadingDeleteProvider.notifier)
+                                      .setDeleting(note.id, true);
+                                  try {
+                                    logd(
+                                      '[DEBUG] Lösche Notiz: id=${note.id}, title=${note.title}',
+                                    );
+                                    await repo.delete(note.id);
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(context)
+                                          .clearSnackBars();
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.noteDeleted,
+                                          ),
+                                          action: SnackBarAction(
+                                            label: AppLocalizations.of(
+                                              context,
+                                            )!.undo,
+                                            onPressed: () async {
+                                              await repo.upsert(note);
+                                            },
+                                          ),
+                                          duration: const Duration(seconds: 5),
+                                        ),
+                                      );
+                                    }
+                                  } catch (e) {
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            '${AppLocalizations.of(context)!.deleteError}: $e',
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  } finally {
+                                    ref
+                                        .read(loadingDeleteProvider.notifier)
+                                        .setDeleting(note.id, false);
+                                  }
                                 },
-                              ),
-                            ),
-                            IconButton(
-                              icon: isDeleting
-                                  ? const CircularProgressIndicator()
-                                  : const Icon(Icons.delete, color: Colors.red),
-                              tooltip: AppLocalizations.of(context)!.deleteNote,
-                              onPressed: isDeleting
-                                  ? null
-                                  : () async {
-                                      ref
-                                          .read(loadingDeleteProvider.notifier)
-                                          .setDeleting(note.id, true);
-                                      try {
-                                        logd(
-                                          '[DEBUG] Lösche Notiz: id=${note.id}, title=${note.title}',
-                                        );
-                                        await repo.delete(note.id);
-                                        if (context.mounted) {
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).clearSnackBars();
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                AppLocalizations.of(
-                                                  context,
-                                                )!.noteDeleted,
-                                              ),
-                                              action: SnackBarAction(
-                                                label: AppLocalizations.of(
-                                                  context,
-                                                )!.undo,
-                                                onPressed: () async {
-                                                  await repo.upsert(note);
-                                                },
-                                              ),
-                                              duration: const Duration(
-                                                seconds: 5,
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      } catch (e) {
-                                        if (context.mounted) {
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                '${AppLocalizations.of(context)!.deleteError}: $e',
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      } finally {
-                                        ref
-                                            .read(
-                                              loadingDeleteProvider.notifier,
-                                            )
-                                            .setDeleting(note.id, false);
-                                      }
-                                    },
-                            ),
-                          ],
                         );
                       },
                     );

@@ -1,11 +1,11 @@
 {
-    "name": "catnotes",
-    "short_name": "catnotes",
+    "name": "CatNotes",
+    "short_name": "CatNotes",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FFFFFF",
+    "theme_color": "#FF6B6B",
+    "description": "CatNotes – Deine Notiz-App",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

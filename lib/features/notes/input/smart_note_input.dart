@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../theme/app_theme.dart';
 
-/// Kompaktes Diktat/Schreib-Eingabefeld.
-/// Action-Buttons werden vom Parent verwaltet, damit sie immer sichtbar bleiben.
+/// Diktat/Schreib-Eingabefeld im Card-Stil.
+/// Action-Buttons werden vom Parent verwaltet.
 class SmartNoteInput extends StatefulWidget {
   final TextEditingController controller;
 
@@ -22,64 +23,81 @@ class _SmartNoteInputState extends State<SmartNoteInput> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.mic, size: 14, color: colorScheme.onSurfaceVariant),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  'Diktieren oder schreiben',
-                  style: textTheme.labelMedium?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            const Icon(Icons.mic, size: 16, color: CatColors.primary),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Diktieren oder schreiben',
+                style: textTheme.labelMedium?.copyWith(
+                  color: CatColors.textMid,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            TextButton.icon(
+              onPressed: () => _focusNode.requestFocus(),
+              icon: const Icon(Icons.keyboard_alt_outlined, size: 15),
+              label: const Text('Tastatur öffnen'),
+              style: TextButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                textStyle: textTheme.labelSmall
+                    ?.copyWith(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        TextField(
+          controller: widget.controller,
+          focusNode: _focusNode,
+          autofocus: true,
+          maxLines: 8,
+          minLines: 5,
+          textInputAction: TextInputAction.newline,
+          keyboardType: TextInputType.multiline,
+          decoration: const InputDecoration(
+            hintText:
+                'Sprich oder schreibe deine Notiz...\n\nErste Zeile → Titel, Rest → Inhalt.',
+            contentPadding: EdgeInsets.fromLTRB(16, 18, 48, 18),
+            suffixIcon: Tooltip(
+              message: 'Mikrofon-Taste der Tastatur für Diktat',
+              child: Padding(
+                padding: EdgeInsets.only(right: 12, top: 14),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Icon(
+                    Icons.mic_none,
+                    size: 22,
+                    color: CatColors.textMid,
                   ),
-                ),
-              ),
-              TextButton.icon(
-                onPressed: () => _focusNode.requestFocus(),
-                icon: const Icon(Icons.keyboard_alt_outlined, size: 14),
-                label: const Text('Tastatur öffnen'),
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  textStyle: textTheme.labelSmall,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          TextField(
-            controller: widget.controller,
-            focusNode: _focusNode,
-            autofocus: true,
-            maxLines: 4,
-            minLines: 2,
-            textInputAction: TextInputAction.newline,
-            keyboardType: TextInputType.multiline,
-            decoration: InputDecoration(
-              hintText: 'Erste Zeile → Titel, Rest → Inhalt',
-              border: const OutlineInputBorder(),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              suffixIcon: Tooltip(
-                message: 'Mikrofon-Taste der Tastatur für Diktat',
-                child: Icon(
-                  Icons.mic_none,
-                  size: 18,
-                  color: colorScheme.onSurfaceVariant,
                 ),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 6, top: 4),
+            child: Text(
+              '🐾',
+              style: TextStyle(
+                fontSize: 12,
+                color: CatColors.textMid.withValues(alpha: 0.55),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

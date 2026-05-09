@@ -9,6 +9,7 @@ import 'package:catnotes/l10n/app_localizations.dart';
 import 'package:catnotes/core/log.dart';
 import '../../../core/text_zoom/text_zoom_controls.dart';
 import 'note_editor_page.dart';
+import 'simple_note_edit_page.dart';
 
 // StateNotifier für Lösch-Lade-Status
 class LoadingDeleteNotifier extends StateNotifier<Map<String, bool>> {
@@ -125,7 +126,22 @@ class NoteListPage extends ConsumerWidget {
                           isDeleting: isDeleting,
                           onTap: () {
                             ScaffoldMessenger.of(context).clearSnackBars();
-                            context.go('/edit', extra: note.id);
+                            context.push(
+                              '/senior-cat',
+                              extra: {
+                                'title': note.title,
+                                'body': note.body,
+                              },
+                            );
+                          },
+                          onEdit: () {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    SimpleNoteEditPage(noteId: note.id),
+                              ),
+                            );
                           },
                           onDelete: isDeleting
                               ? null

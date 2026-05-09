@@ -15,11 +15,13 @@ class NoteCard extends ConsumerStatefulWidget {
     super.key,
     required this.note,
     this.onTap,
+    this.onEdit,
     this.onDelete,
     this.isDeleting = false,
   });
   final Note note;
   final VoidCallback? onTap;
+  final VoidCallback? onEdit;
   final VoidCallback? onDelete;
   final bool isDeleting;
 
@@ -120,8 +122,20 @@ class _NoteCardState extends ConsumerState<NoteCard>
                         ),
                       ),
                     ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: widget.onEdit,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Icon(
+                          Icons.edit_rounded,
+                          color: CatColors.primary,
+                          size: 22,
+                        ),
+                      ),
+                    ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      padding: const EdgeInsets.only(right: 4),
                       child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: widget.onDelete,

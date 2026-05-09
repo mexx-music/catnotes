@@ -74,6 +74,7 @@ class NoteListPage extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          ScaffoldMessenger.of(context).clearSnackBars();
           Navigator.of(
             context,
           ).push(MaterialPageRoute(builder: (_) => NoteEditorScaffold()));
@@ -122,7 +123,10 @@ class NoteListPage extends ConsumerWidget {
                         return NoteCard(
                           note: note,
                           isDeleting: isDeleting,
-                          onTap: () => context.go('/edit', extra: note.id),
+                          onTap: () {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            context.go('/edit', extra: note.id);
+                          },
                           onDelete: isDeleting
                               ? null
                               : () async {
@@ -154,7 +158,7 @@ class NoteListPage extends ConsumerWidget {
                                               await repo.upsert(note);
                                             },
                                           ),
-                                          duration: const Duration(seconds: 5),
+                                          duration: const Duration(seconds: 3),
                                         ),
                                       );
                                     }

@@ -37,11 +37,17 @@ class NoteListPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 6, 0, 6),
-          child: Image.asset(
-            'assets/images/cat_notes_holder.png',
-            fit: BoxFit.contain,
+        leading: Tooltip(
+          message: 'Zur Startseite',
+          child: GestureDetector(
+            onTap: () => context.go('/home'),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 6, 0, 6),
+              child: Image.asset(
+                'assets/images/cat_notes_holder.png',
+                fit: BoxFit.contain,
+              ),
+            ),
           ),
         ),
         title: Padding(

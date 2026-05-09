@@ -3,10 +3,13 @@ import 'package:catnotes/features/notes/views/note_list_page.dart';
 import 'package:catnotes/features/notes/views/note_editor_page.dart';
 import 'package:catnotes/features/senior_cat/senior_cat_page.dart';
 import 'package:catnotes/splash/splash_screen.dart';
+import 'package:catnotes/features/home/views/home_page.dart';
 
 final appRouter = GoRouter(
+  initialLocation: '/home',
   routes: [
     GoRoute(path: '/splash', builder: (_, __) => const SplashScreen()),
+    GoRoute(path: '/home', builder: (_, __) => const HomePage()),
     GoRoute(path: '/', builder: (_, __) => const NoteListPage()),
     GoRoute(
       path: '/edit',

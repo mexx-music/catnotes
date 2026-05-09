@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
-import '../../../core/text_zoom/text_zoom_scope.dart';
 import '../../../data/models/note.dart';
 import '../../../data/repos/note_repository.dart';
 import '../../../theme/app_theme.dart';
@@ -102,9 +101,6 @@ class _NoteEditorScaffoldState extends ConsumerState<NoteEditorScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = TextZoomScope.of(context);
-    final textStyle = TextStyle(fontSize: controller.size);
-
     return Scaffold(
       backgroundColor: CatColors.surface,
       appBar: AppBar(
@@ -152,11 +148,16 @@ class _NoteEditorScaffoldState extends ConsumerState<NoteEditorScaffold> {
                   ),
                   hintText: AppLocalizations.of(context)!.titleLabel,
                   hintStyle: TextStyle(
-                    fontSize: controller.size,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
                     color: CatColors.textMid,
                   ),
                 ),
-                style: textStyle,
+                style: const TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w700,
+                  color: CatColors.textDark,
+                ),
               ),
               const SizedBox(height: 20),
               Text(
@@ -173,13 +174,17 @@ class _NoteEditorScaffoldState extends ConsumerState<NoteEditorScaffold> {
                   ),
                   hintText: AppLocalizations.of(context)!.bodyLabel,
                   hintStyle: TextStyle(
-                    fontSize: controller.size,
+                    fontSize: 20,
                     color: CatColors.textMid,
                   ),
                 ),
                 maxLines: null,
                 minLines: 6,
-                style: textStyle,
+                style: const TextStyle(
+                  fontSize: 21,
+                  height: 1.3,
+                  color: CatColors.textDark,
+                ),
               ),
               const SizedBox(height: 40),
             ],

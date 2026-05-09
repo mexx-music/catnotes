@@ -65,8 +65,7 @@ class _SmartNoteInputState extends State<SmartNoteInput> {
           textInputAction: TextInputAction.newline,
           keyboardType: TextInputType.multiline,
           decoration: const InputDecoration(
-            hintText:
-                'Sprich oder schreibe deine Notiz...\n\nErste Zeile → Titel, Rest → Inhalt.',
+            hintText: 'z. B. Einkauf: Milch und Brot kaufen',
             contentPadding: EdgeInsets.fromLTRB(16, 18, 16, 18),
             suffixIcon: Tooltip(
               message: 'Mikrofon-Taste der Tastatur für Diktat',
@@ -78,17 +77,26 @@ class _SmartNoteInputState extends State<SmartNoteInput> {
             ),
           ),
         ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 6, top: 4),
-            child: Text(
-              '🐾',
-              style: TextStyle(
-                fontSize: 12,
-                color: CatColors.textMid.withValues(alpha: 0.55),
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Row(
+            children: [
+              Text(
+                'Doppelpunkt trennt Titel und Inhalt',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: CatColors.textMid.withValues(alpha: 0.80),
+                ),
               ),
-            ),
+              const Spacer(),
+              Text(
+                '🐾',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: CatColors.textMid.withValues(alpha: 0.55),
+                ),
+              ),
+            ],
           ),
         ),
       ],

@@ -137,18 +137,45 @@ class _NoteEditorScaffoldState extends ConsumerState<NoteEditorScaffold> {
                 onApplyAsContent: _applyRawAsContent,
               ),
               const SizedBox(height: 28),
+              Text(
+                AppLocalizations.of(context)!.titleLabel,
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+              const SizedBox(height: 6),
               TextField(
                 controller: _title,
+                textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.titleLabel,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 14,
+                  ),
+                  hintText: AppLocalizations.of(context)!.titleLabel,
+                  hintStyle: TextStyle(
+                    fontSize: controller.size,
+                    color: CatColors.textMid,
+                  ),
                 ),
                 style: textStyle,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
+              Text(
+                AppLocalizations.of(context)!.bodyLabel,
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+              const SizedBox(height: 6),
               TextField(
                 controller: _body,
                 decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.bodyLabel,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 14,
+                  ),
+                  hintText: AppLocalizations.of(context)!.bodyLabel,
+                  hintStyle: TextStyle(
+                    fontSize: controller.size,
+                    color: CatColors.textMid,
+                  ),
                 ),
                 maxLines: null,
                 minLines: 6,
@@ -257,7 +284,7 @@ class _InlineButtons extends StatelessWidget {
               child: FilledButton.icon(
                 onPressed: hasText ? onApply : null,
                 icon: const Icon(Icons.auto_fix_high, size: 18),
-                label: const Text('In Titel & Inhalt übernehmen'),
+                label: const Text('Als Notiz übernehmen'),
               ),
             ),
             const SizedBox(width: 12),
@@ -265,7 +292,7 @@ class _InlineButtons extends StatelessWidget {
               flex: 2,
               child: OutlinedButton(
                 onPressed: hasText ? onApplyAsContent : null,
-                child: const Text('Nur als Inhalt'),
+                child: const Text('Nur Text'),
               ),
             ),
           ],
@@ -293,12 +320,25 @@ class _TipBox extends StatelessWidget {
           const Text('🐾', style: TextStyle(fontSize: 16)),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(
-              'Tipp: Diktat ist oft schneller als Tippen.',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: CatColors.primary,
-                    fontWeight: FontWeight.w500,
-                  ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Futter: morgen Katzenfutter kaufen',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: CatColors.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Titel vor : — Inhalt dahinter',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: CatColors.textMid,
+                      ),
+                ),
+              ],
             ),
           ),
           const Icon(

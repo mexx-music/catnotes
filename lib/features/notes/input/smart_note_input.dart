@@ -67,19 +67,13 @@ class _SmartNoteInputState extends State<SmartNoteInput> {
           decoration: const InputDecoration(
             hintText:
                 'Sprich oder schreibe deine Notiz...\n\nErste Zeile → Titel, Rest → Inhalt.',
-            contentPadding: EdgeInsets.fromLTRB(16, 18, 48, 18),
+            contentPadding: EdgeInsets.fromLTRB(16, 18, 16, 18),
             suffixIcon: Tooltip(
               message: 'Mikrofon-Taste der Tastatur für Diktat',
-              child: Padding(
-                padding: EdgeInsets.only(right: 12, top: 14),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Icon(
-                    Icons.mic_none,
-                    size: 22,
-                    color: CatColors.textMid,
-                  ),
-                ),
+              child: Icon(
+                Icons.mic_none,
+                size: 20,
+                color: CatColors.textMid,
               ),
             ),
           ),
